@@ -1,12 +1,8 @@
 const { DataTypes, Sequelize } = require('sequelize');
-const config = require('./config.js'); // Asegúrate de tener un archivo config.js con la configuración
+const sequelize = require('../sequelize'); // Importa la instancia de Sequelize
 
-const sequelize = new Sequelize(config.database, config.username, config.password, {
-  host: config.host,
-  dialect: config.dialect,
-});
-
-const Catalogo = sequelize.define('catalogo', {
+const VistaCatalogo = sequelize.define('vista_catalogo', {
+  // Define las columnas de la vista aquí, asegúrate de que coincidan con la vista en la base de datos
   id: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -61,8 +57,11 @@ const Catalogo = sequelize.define('catalogo', {
     allowNull: true,
     defaultValue: null,
   },
+  // ... otras columnas ...
 }, {
   // Opciones de configuración adicionales
+  tableName: 'vista_catalogo', // Especifica el nombre de la vista en la base de datos
+  timestamps: false, // Si la vista no tiene timestamps
 });
 
-module.exports = Catalogo;
+module.exports = VistaCatalogo;
