@@ -1,0 +1,17 @@
+# Node.js
+node_modules/
+.DS_Store
+
+# Archivos de configuración
+.env
+
+# Archivos de registro
+logs/
+
+# Archivos generados por editor/IDE
+.vscode/
+.idea/
+
+# Archivos de construcción
+dist/
+.webpack/
