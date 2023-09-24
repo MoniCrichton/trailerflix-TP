@@ -1,3 +1,4 @@
+const { INTEGER } = require('sequelize');
 const config = require('./config.js');
 
 const sequelize = new Sequelize(config.database, config.username, config.password, {
@@ -8,15 +9,70 @@ const sequelize = new Sequelize(config.database, config.username, config.passwor
 
 const Catalogo = sequelize.define('catalogo', {
   // Define las columnas de la tabla "catalogo" aquí
-  nombre: {
-    type: DataTypes.STRING,
+  id: {
+    type: INTEGER,
     allowNull: false,
+    Key: PRI,
+    Default: null,
+    Extra: autoincrement  
   },
-  precio: {
-    type: DataTypes.FLOAT,
-    allowNull: false,
+  
+  poster: { //colocar referncia a pagina??
+    type: varchar,
+    allowNull: true,
+    Key: null,
+    Default: null,
+    Extra: null 
   },
-  // Otras columnas...
+
+  titulo: { 
+    type: varchar,
+    allowNull: true,
+    Key: null,
+    Default: null,
+    Extra: null 
+  },
+  
+  categoría: { 
+    type: varchar,
+    allowNull: true,
+    Key: null,
+    Default: null,
+    Extra: null 
+  },
+  
+  genero: { 
+    type: varchar,
+    allowNull: true,
+    Key: null,
+    Default: null,
+    Extra: null 
+  },
+  
+  resumen: { 
+    type: text,
+    allowNull: true,
+    Key: null,
+    Default: null,
+    Extra: null 
+  },
+
+  reparto: { 
+    type: text,
+    allowNull: true,
+    Key: null,
+    Default: null,
+    Extra: null 
+  },
+
+  trailer: { 
+    type: varchar,
+    allowNull: true,
+    Key: null,
+    Default: null,
+    Extra: null 
+  },
+  
 }, {
   // Opciones de configuración adicionales
 });
