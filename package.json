@@ -1,10 +1,11 @@
 {
   "name": "trailerflix",
   "version": "1.0.0",
-  "description": "",
+  "description": "catalogo de peliculas y series. TP para curso NodeJS UNTREF",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "generate-docs": "swagger-jsdoc -d ./swaggerDef.js -o ./documentacion/swagger.md"
   },
   "keywords": [],
   "author": "",
@@ -12,7 +13,13 @@
   "dependencies": {
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "html2canvas": "^1.4.1",
     "mysql2": "^3.6.1",
-    "sequelize": "^6.33.0"
+    "sequelize": "^6.33.0",
+    "swagger-ui-express": "^5.0.0"
+  },
+  "devDependencies": {
+    "jsdoc": "^4.0.2",
+    "swagger-jsdoc": "^6.2.8"
   }
 }

@@ -2,6 +2,9 @@ const express = require('express');
 const app = express();
 const { Sequelize } = require('sequelize');
 const config = require('./config'); // Importa la configuración de la base de datos
+const swaggerUI = require("swagger-ui-express");
+const swaggerJsDoc = require("swagger-jsdoc");
+
 
 // Configura Sequelize para conectar con la base de datos
 const sequelize = new Sequelize(config.database, config.username, config.password, {
@@ -30,12 +33,18 @@ app.get('/catalogo', async (req, res) => {
   try {
     // Utiliza el modelo Sequelize para obtener el catálogo completo
     const catalogoCompleto = await VistaCatalogo.findAll();
-    
-    // Modifica la respuesta para incluir la ruta absoluta de la imagen
-    const catalogoConRutaImagen = catalogoCompleto.map((item) => ({
-      ...item.toJSON(),
-      poster: construirRutaImagen(item.poster), // Reemplaza "poster" con el nombre del campo de imagen
-    }));
+
+    // Modifica la respuesta para incluir la ruta absoluta de la imagen si está disponible
+    const catalogoConRutaImagen = catalogoCompleto.map((item) => {
+      if (item.poster) {
+        return {
+          ...item.toJSON(),
+          poster: construirRutaImagen(item.poster), // Reemplaza "poster" con el nombre del campo de imagen
+        };
+      } else {
+        return item.toJSON(); // Si no hay imagen, devuelve el elemento sin cambios
+      }
+    });
 
     // Responde con los resultados en formato JSON
     res.json(catalogoConRutaImagen);
@@ -44,6 +53,8 @@ app.get('/catalogo', async (req, res) => {
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
+
+
 
 app.get('/catalogo/id/:id', async (req, res) => {
   // Obtiene el código de película o serie desde req.params.id
