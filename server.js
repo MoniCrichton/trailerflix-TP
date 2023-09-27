@@ -1,10 +1,14 @@
 const express = require('express');
 const app = express();
 const { Sequelize } = require('sequelize');
-const config = require('./config'); // Importa la configuración de la base de datos
-const swaggerUI = require("swagger-ui-express");
-const swaggerJsDoc = require("swagger-jsdoc");
+const config = require('config'); // Importa la configuración de la base de datos
+const swaggerUi = require('swagger-ui-express');
+const specs = require('swaggerDef'); // Importa la definición de Swagger que creaste anteriormente
 
+
+
+// Agrega una ruta para mostrar la documentación Swagger
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 // Configura Sequelize para conectar con la base de datos
 const sequelize = new Sequelize(config.database, config.username, config.password, {

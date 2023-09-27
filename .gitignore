@@ -1,11 +1,9 @@
-# Node.js
-.DS_Store
-
 # Archivos de configuración
 .env
 
-# Archivos de registro
-logs/
+# Archivos de node
+.node_modules
+
 
 # Archivos generados por editor/IDE
 .vscode/

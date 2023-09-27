@@ -1,38 +1,16 @@
-/**
- * @swagger
- * info:
- *   title: Traileflix
- *   version: 1.0.0
- *   description: catalogo de peliculas y series. TP para curso NodeJS UNTREF
- */
+const swaggerJsdoc = require('swagger-jsdoc');
 
-/**
- * @swagger
- * components:
- *   schemas:
- *     MyModel:
- *       type: object
- *       properties:
- *         id:
- *           type: integer
- *           description: The ID of the item
- *         name:
- *           type: string
- *           description: The name of the item
- */
+const options = {
+  swaggerDefinition: {
+    info: {
+      title: 'trailerflix',
+      version: '1.0.0',
+      description: 'catalogo de peliculas y series. TP para curso NodeJS UNTREF',
+    },
+  },
+  apis: ['./routes/*.js'], // Rutas a tus archivos de rutas donde se definen los endpoints.
+};
 
-/**
- * @swagger
- * /api/myendpoint:
- *   get:
- *     summary: Get all items
- *     responses:
- *       '200':
- *         description: A list of items
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/MyModel'
- */
+const specs = swaggerJsdoc(options);
+
+module.exports = specs;

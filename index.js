@@ -1,13 +1,13 @@
+console.log("esta es la ruta :", __dirname);
+
 const sequelize = require('./sequelize');
-const Actores = require('./models/actores.js'); 
-const Catalogo = require('./models/catalogo.js'); 
-const Categorias = require('./models/categorias.js'); 
-const Genero = require('./models/genero.js'); 
-const Participaciones = require('./models/participaciones.js'); 
-const Titulos = require('./models/titulos.js'); 
-
-
-
+const Actores = require('./models/actores.js');
+const Catalogo = require('./models/catalogo.js');
+const Categorias = require('./models/categorias.js');
+const Genero = require('./models/genero.js');
+const Participaciones = require('./models/participaciones.js');
+const Titulos = require('./models/titulos.js');
+const VistaCatalogo = require('./models/vistaCatalogo.js');
 
 async function iniciarProyecto() {
   try {

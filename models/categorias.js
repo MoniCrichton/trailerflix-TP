@@ -1,5 +1,5 @@
 const { DataTypes, Sequelize } = require('sequelize');
-const config = require('./config.js'); // Asegúrate de tener un archivo config.js con la configuración
+const config = require('../config.js'); //  Usa '../' para retroceder un nivel
 
 const sequelize = new Sequelize(config.database, config.username, config.password, {
   host: config.host,
