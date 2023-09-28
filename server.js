@@ -20,7 +20,7 @@ const sequelize = new Sequelize(config.database, config.username, config.passwor
 const { Categoria, VistaCatalogo } = require('./models');
 
 // Define rutas de los endpoints
-app.get('/categorias', async (req, res) => {
+app.get('categorias', async (req, res) => {
   try {
     // Utiliza el modelo Sequelize para obtener todas las categorías
     const categorias = await Categoria.findAll();
@@ -33,7 +33,7 @@ app.get('/categorias', async (req, res) => {
   }
 });
 
-app.get('/catalogo', async (req, res) => {
+app.get('catalogo', async (req, res) => {
   try {
     // Utiliza el modelo Sequelize para obtener el catálogo completo
     const catalogoCompleto = await VistaCatalogo.findAll();
