@@ -19,9 +19,10 @@ const Categoria = sequelize.define('Categoria', {
     allowNull: true,
   },
 }, {
-  tableName: 'Categoria',
+  tableName: 'categorias',
   timestamps: false,
   sync: { force: false },
+  freezeTableName: true, // Agrega esta línea
 });
 
 module.exports = Categoria;

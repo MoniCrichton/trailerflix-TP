@@ -41,7 +41,12 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 app.get('/categorias', async (req, res) => {
   try {
     const categorias = await Categorias.findAll();
-    res.json(categorias);
+    if (categorias.length === 0) {
+      // Si no hay categorías, puedes devolver un mensaje o un array vacío según tu preferencia
+      res.json({ message: 'No hay categorías disponibles' });
+    } else {
+      res.json(categorias);
+    }
   } catch (error) {
     console.error('Error al obtener las categorías:', error);
     res.status(500).json({ error: 'Error interno del servidor al obtener las categorías.' });

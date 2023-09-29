@@ -12,6 +12,5 @@ const sequelize = new Sequelize(
   }
 );
 
-// Resto de la configuración de Sequelize...
 
 module.exports = sequelize; // Exporta la instancia de Sequelize para su uso en otros archivos
