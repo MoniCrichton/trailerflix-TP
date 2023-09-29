@@ -1,5 +1,5 @@
 const { Sequelize } = require('sequelize');
-const config = require('config.js'); // Importa la configuración desde config.js
+const config = require('./config.js'); // Importa la configuración desde config.js
 
 const sequelize = new Sequelize(
   config.database,
@@ -7,6 +7,7 @@ const sequelize = new Sequelize(
   config.password,
   {
     host: config.host,
+    port: config.port, 
     dialect: config.dialect,
   }
 );

@@ -1,14 +1,18 @@
 const express = require('express');
 const app = express();
-const { Sequelize } = require('sequelize');
-const config = require('config'); // Importa la configuración de la base de datos
+const { Sequelize, Op } = require('sequelize');
+const config = require('./config');
 const swaggerUi = require('swagger-ui-express');
-const specs = require('swaggerDef'); // Importa la definición de Swagger que creaste anteriormente
+const specs = require('./swaggerDef');
+const path = require('path');
+const Categorias = require(path.join(__dirname, './models/categorias'));
+const VistaCatalogo = require(path.join(__dirname, './models/vistaCatalogo'));
 
-
-
-// Agrega una ruta para mostrar la documentación Swagger
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+// Middleware de registro para imprimir cada solicitud en la consola
+app.use((req, res, next) => {
+  console.log(`Solicitud recibida: ${req.method} ${req.url}`);
+  next();
+});
 
 // Configura Sequelize para conectar con la base de datos
 const sequelize = new Sequelize(config.database, config.username, config.password, {
@@ -16,93 +20,90 @@ const sequelize = new Sequelize(config.database, config.username, config.passwor
   dialect: config.dialect,
 });
 
-// Define modelos para las tablas (por ejemplo, Catalogo, Categorias, etc.) aquí
-const { Categoria, VistaCatalogo } = require('./models');
-
-// Define rutas de los endpoints
-app.get('categorias', async (req, res) => {
+// Sincroniza modelos
+const syncModels = async () => {
   try {
-    // Utiliza el modelo Sequelize para obtener todas las categorías
-    const categorias = await Categoria.findAll();
-    
-    // Responde con los resultados en formato JSON
+    await Categorias.sync();
+    await VistaCatalogo.sync();
+    console.log('Modelos sincronizados correctamente');
+  } catch (error) {
+    console.error('Error al sincronizar modelos:', error);
+  }
+};
+
+// Llama a la función para sincronizar modelos al inicio
+syncModels();
+
+// Agrega una ruta para mostrar la documentación Swagger
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+
+// Rutas
+app.get('/categorias', async (req, res) => {
+  try {
+    const categorias = await Categorias.findAll();
     res.json(categorias);
   } catch (error) {
     console.error('Error al obtener las categorías:', error);
-    res.status(500).json({ error: 'Error interno del servidor' });
+    res.status(500).json({ error: 'Error interno del servidor al obtener las categorías.' });
   }
 });
 
-app.get('catalogo', async (req, res) => {
+// Función para construir la ruta de la imagen
+const construirRutaImagen = (nombreImagen) => {
+  // Supongo que las imágenes se almacenan en una carpeta llamada "imagenes" en la raíz del proyecto
+  return `./imagenes/${nombreImagen}`;
+};
+
+app.get('/catalogo', async (req, res) => {
   try {
-    // Utiliza el modelo Sequelize para obtener el catálogo completo
     const catalogoCompleto = await VistaCatalogo.findAll();
-
-    // Modifica la respuesta para incluir la ruta absoluta de la imagen si está disponible
     const catalogoConRutaImagen = catalogoCompleto.map((item) => {
-      if (item.poster) {
-        return {
-          ...item.toJSON(),
-          poster: construirRutaImagen(item.poster), // Reemplaza "poster" con el nombre del campo de imagen
-        };
-      } else {
-        return item.toJSON(); // Si no hay imagen, devuelve el elemento sin cambios
-      }
+      return item.poster
+        ? { ...item.toJSON(), poster: construirRutaImagen(item.poster) }
+        : item.toJSON();
     });
-
-    // Responde con los resultados en formato JSON
     res.json(catalogoConRutaImagen);
   } catch (error) {
     console.error('Error al obtener el catálogo completo:', error);
-    res.status(500).json({ error: 'Error interno del servidor' });
+    res.status(500).json({ error: 'Error interno del servidor al obtener el catálogo completo.' });
   }
 });
 
-
-
 app.get('/catalogo/id/:id', async (req, res) => {
-  // Obtiene el código de película o serie desde req.params.id
-  const codigo = req.params.id;
+  // Obtiene el id de la película o serie desde req.params.id
+  const id = req.params.id;
   
   try {
-    // Utiliza el modelo Sequelize para buscar el registro en el catálogo por código
-    const resultado = await VistaCatalogo.findOne({
-      where: { codigo: codigo },
-    });
+    // Utiliza el modelo Sequelize para buscar el registro en el catálogo por id
+    const resultado = await VistaCatalogo.findByPk(id);
     
     if (resultado) {
       // Si se encuentra el registro, responde con los resultados en formato JSON
       res.json(resultado);
     } else {
       // Si no se encuentra el registro, responde con un mensaje de error
-      res.status(404).json({ error: 'No se encontró ninguna película o serie con ese código.' });
+      res.status(404).json({ error: 'No se encontró ninguna película o serie con ese id.' });
     }
   } catch (error) {
-    console.error('Error al buscar la película o serie por código:', error);
+    console.error('Error al buscar la película o serie por id:', error);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
 
 
 app.get('/catalogo/nombre/:nombre', async (req, res) => {
-  // Obtiene el nombre o parte del nombre desde req.params.nombre
   const nombre = req.params.nombre;
-  
   try {
-    // Utiliza el modelo Sequelize para buscar registros en el catálogo que coincidan con el nombre
     const resultados = await VistaCatalogo.findAll({
       where: {
-        nombre: {
-          [Sequelize.Op.like]: `%${nombre}%`, // Busca registros que contengan el nombre o parte del nombre
+        titulo: {
+          [Op.like]: `%${nombre}%`,
         },
       },
     });
-    
     if (resultados.length > 0) {
-      // Si se encuentran registros, responde con los resultados en formato JSON
       res.json(resultados);
     } else {
-      // Si no se encuentran registros, responde con un mensaje de error
       res.status(404).json({ error: 'No se encontraron películas o series con ese nombre.' });
     }
   } catch (error) {
@@ -111,26 +112,19 @@ app.get('/catalogo/nombre/:nombre', async (req, res) => {
   }
 });
 
-
 app.get('/catalogo/genero/:genero', async (req, res) => {
-  // Obtiene el género proporcionado desde req.params.genero
   const genero = req.params.genero;
-  
   try {
-    // Utiliza el modelo Sequelize para buscar registros en el catálogo que coincidan con el género
     const resultados = await VistaCatalogo.findAll({
       where: {
         genero: {
-          [Sequelize.Op.like]: `%${genero}%`, // Busca registros que contengan el género
+          [Op.like]: `%${genero}%`,
         },
       },
     });
-    
     if (resultados.length > 0) {
-      // Si se encuentran registros, responde con los resultados en formato JSON
       res.json(resultados);
     } else {
-      // Si no se encuentran registros, responde con un mensaje de error
       res.status(404).json({ error: 'No se encontraron películas o series con ese género.' });
     }
   } catch (error) {
@@ -139,26 +133,19 @@ app.get('/catalogo/genero/:genero', async (req, res) => {
   }
 });
 
-
 app.get('/catalogo/categoria/:categoria', async (req, res) => {
-  // Obtiene la categoría proporcionada desde req.params.categoria
   const categoria = req.params.categoria;
-  
   try {
-    // Utiliza el modelo Sequelize para buscar registros en el catálogo que coincidan con la categoría
     const resultados = await VistaCatalogo.findAll({
       where: {
         categoria: {
-          [Sequelize.Op.like]: `%${categoria}%`, // Busca registros que contengan la categoría
+          [Op.like]: `%${categoria}%`,
         },
       },
     });
-    
     if (resultados.length > 0) {
-      // Si se encuentran registros, responde con los resultados en formato JSON
       res.json(resultados);
     } else {
-      // Si no se encuentran registros, responde con un mensaje de error
       res.status(404).json({ error: 'No se encontraron películas o series con esa categoría.' });
     }
   } catch (error) {
@@ -166,7 +153,6 @@ app.get('/catalogo/categoria/:categoria', async (req, res) => {
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
-
 
 // Escucha en el puerto 3000 (o el puerto que prefieras)
 const PORT = process.env.PORT || 3000;

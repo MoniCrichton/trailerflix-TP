@@ -8,7 +8,7 @@ const options = {
       description: 'catalogo de peliculas y series. TP para curso NodeJS UNTREF',
     },
   },
-  apis: ['./routes/*.js'], // Rutas a tus archivos de rutas donde se definen los endpoints.
+  apis: ['./server.js'], // Rutas a tus archivos de rutas donde se definen los endpoints.
 };
 
 const specs = swaggerJsdoc(options);

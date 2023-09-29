@@ -1,4 +1,4 @@
-console.log("esta es la ruta :", __dirname);
+// console.log("esta es la ruta :", __dirname);
 
 const sequelize = require('./sequelize');
 const Actores = require('./models/actores.js');

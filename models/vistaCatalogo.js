@@ -62,6 +62,7 @@ const VistaCatalogo = sequelize.define('vista_catalogo', {
   // Opciones de configuración adicionales
   tableName: 'vista_catalogo', // Especifica el nombre de la vista en la base de datos
   timestamps: false, // Si la vista no tiene timestamps
+  sync: { force: false } // Evita la sincronización automática
 });
 
 module.exports = VistaCatalogo;

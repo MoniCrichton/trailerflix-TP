@@ -1,12 +1,12 @@
 const { DataTypes, Sequelize } = require('sequelize');
-const config = require('../config.js'); //  Usa '../' para retroceder un nivel
+const config = require('../config.js'); 
 
 const sequelize = new Sequelize(config.database, config.username, config.password, {
   host: config.host,
   dialect: config.dialect,
 });
 
-const Categorias = sequelize.define('categorias', {
+const Categoria = sequelize.define('Categoria', {
   id: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -15,11 +15,13 @@ const Categorias = sequelize.define('categorias', {
   },
   
   nombre: {
-    type: DataTypes.STRING(255), // Usar DataTypes.STRING y especificar la longitud máxima
+    type: DataTypes.STRING(255),
     allowNull: true,
   },
 }, {
-  // Opciones de configuración adicionales
+  tableName: 'Categoria',
+  timestamps: false,
+  sync: { force: false },
 });
 
-module.exports = Categorias;
+module.exports = Categoria;
