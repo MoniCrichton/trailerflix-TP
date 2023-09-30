@@ -2,8 +2,6 @@ const express = require('express');
 const app = express();
 const { Sequelize, Op } = require('sequelize');
 const config = require('./config');
-const swaggerUi = require('swagger-ui-express');
-const specs = require('./swaggerDef');
 const path = require('path');
 const Categorias = require(path.join(__dirname, './models/categorias'));
 const VistaCatalogo = require(path.join(__dirname, './models/vistaCatalogo'));
@@ -34,8 +32,6 @@ const syncModels = async () => {
 // Llama a la función para sincronizar modelos al inicio
 syncModels();
 
-// Agrega una ruta para mostrar la documentación Swagger
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 // Rutas
 app.get('/categorias', async (req, res) => {
