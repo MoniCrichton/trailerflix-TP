@@ -142,7 +142,7 @@ este es la informción de la estructura de las tablas en mysql
 ### Diagrama de Tablas 
 
 
-![Trailerflix-TP.png](./imagen/trailerflix-TP.png)
+![Trailerflix-TP.png](./trailerflix-TP.png)
 
 ### 4. Ejecutar la Aplicación
 
