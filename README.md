@@ -249,6 +249,13 @@ Ejemplo:
   "error": "No se encontraron películas o series con esa categoría."
 }
 ```
+
+## Datos de Ejemplo
+
+En el archivo [`trailer.json`](trailer.json), encontrarás datos de ejemplo que puedes utilizar para probar la aplicación localmente. Este archivo contiene información sobre películas y series que pueden ser importadas y utilizadas para poblar la base de datos de la aplicación.
+
+ Este archivo `trailer.json` original fue convertido a formato CSV utilizando la herramienta "JSON to CSV" de Khaer Ansori para facilitar la importación de datos a MySQL. Puedes encontrar el archivo [CSV trailerplana revision.csv](trailerplana-revision.csv) resultante (con modificaciones por errores en el archivo json) en el mismo directorio.
+
 ## Pruebas con Postman
 
 Postman es una herramienta muy útil para probar y documentar APIs. Puedes descargarla desde la página de descargas de Postman.
