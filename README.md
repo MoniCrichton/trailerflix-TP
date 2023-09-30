@@ -73,6 +73,77 @@ module.exports = sequelize;
 
 Asegúrate de tener MySQL instalado y ejecuta los scripts en ./mysql-scripts para crear las tablas.
 
+este es la informción de la estructura de las tablas en mysql
+
+ ### Estructura de las Tablas en la Base de Datos
+
+#### Actores
+
+- **id:** Clave primaria (PK)
+- **actor:** Nombre del actor (tipo varchar(255))
+
+#### Catálogo
+
+- **id:** Clave primaria (PK)
+- **poster:** URL del póster (tipo varchar(255))
+- **titulo:** Título de la película o serie (tipo varchar(255))
+- **categoria:** Categoría de la película o serie (tipo varchar(255))
+- **genero:** Género de la película o serie (tipo varchar(255))
+- **resumen:** Resumen de la película o serie (tipo text)
+- **temporadas:** Número de temporadas (tipo int)
+- **reparto:** Lista de actores en el reparto (tipo text)
+- **trailer:** URL del tráiler (tipo varchar(255))
+
+#### Categorías
+
+- **id:** Clave primaria (PK)
+- **nombre:** Nombre de la categoría (tipo varchar(255))
+
+#### Género
+
+- **id:** Clave primaria (PK)
+- **genero:** Género de la película o serie (tipo varchar(255))
+
+
+#### Reparto
+
+- **id:** Clave primaria (PK)
+- **idTitulo:** Clave foránea (FK) que hace referencia a la tabla títulos (id)
+- **idActor:** Clave foránea (FK) que hace referencia a la tabla actores (id)
+
+#### Títulos
+
+- **id:** Clave primaria (PK)
+- **poster:** URL del póster (tipo varchar(255))
+- **titulo:** Título de la película o serie (tipo varchar(255))
+- **categoria:** Categoría de la película o serie (tipo tinyint)
+- **resumen:** Resumen de la película o serie (tipo varchar(948))
+- **temporadas:** Número de temporadas (tipo int)
+- **trailer:** URL del tráiler (tipo varchar(255))
+
+### Relaciones Claves Primarias y Foráneas
+
+    Claves Primarias (PK):
+        actores: id
+        catalogo: id
+        categorias: id
+        genero: id
+        reparto: id
+        titulos: id
+
+    Claves Foráneas (FK):
+        catalogo:
+            categoria hace referencia a categorias(id)
+            genero hace referencia a genero(id)
+        reparto:
+            idTitulo hace referencia a titulos(id)
+            idActor hace referencia a actores(id)
+
+### Diagrama de Tablas 
+
+
+![Trailerflix-TP.png](./imagen/trailerflix-TP.png)
+
 ### 4. Ejecutar la Aplicación
 
 ```bash
